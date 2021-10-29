@@ -6,6 +6,15 @@ export const Container = styled.SafeAreaView`
   padding: 4px 0;
 `;
 
+export const Spinner = styled.SafeAreaView`
+  background-color: #141a29;
+  flex: 1;
+  padding: 4px 0;
+
+  justify-content: center;
+  align-items: center;
+`;
+
 export const SearchContainer = styled.View`
   flex-direction: row;
   width: 100%;
@@ -42,9 +51,10 @@ export const Title = styled.Text`
 export const BannerButton = styled.TouchableOpacity``;
 
 export const Banner = styled.Image`
-  height: 150px;
+  height: 200px;
   border-radius: 6px;
   margin: 0 14px;
+  align-items: flex-start;
 `;
 
 export const SliderMovie = styled.FlatList`
