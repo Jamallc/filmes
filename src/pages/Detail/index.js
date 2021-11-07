@@ -18,6 +18,7 @@ import api, { key } from '../../services/api'
 import Stars from 'react-native-stars'
 import Genres from '../../components/Genres'
 import ModalLink from '../../components/ModalLink'
+import { saveMovie, hasMovie, deletMovie } from '../../utils/storage'
 
 function Detail() {
   const navigation = useNavigation()
@@ -25,6 +26,7 @@ function Detail() {
 
   const [movie, setMovie] = useState({})
   const [openLink, setOpenLink] = useState(false)
+  const [favoritedMovie, setFavoritedMovie] = useState(false)
 
   useEffect(() => {
     let isActive = true;
@@ -43,7 +45,9 @@ function Detail() {
 
       if (isActive) {
         setMovie(response.data);
-        console.log(response.data)
+
+        const isFavorite = await hasMovie(response.data)
+        setFavoritedMovie(isFavorite)
       }
     }
 
@@ -58,6 +62,16 @@ function Detail() {
 
   }, [])
 
+  async function handlefavoriteMovie() {
+    if (favoritedMovie) {
+      await deletMovie(movie.id);
+      setFavoritedMovie(false)
+    } else {
+      await saveMovie('@primereact', movie)
+      setFavoritedMovie(true)
+    }
+  }
+
   return (
     <Container>
       <Header>
@@ -68,9 +82,9 @@ function Detail() {
             color="#fff"
           />
         </HeaderButton>
-        <HeaderButton>
+        <HeaderButton onPress={() => handlefavoriteMovie(movie)}>
           <Ionicons
-            name="bookmark"
+            name={favoritedMovie ? 'bookmark' : 'bookmark-outline'}
             size={28}
             color="#fff"
           />
