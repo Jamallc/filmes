@@ -105,7 +105,7 @@ function Home() {
       <Header title="React Prime" />
       <SearchContainer>
         <Input
-          placeholder="Ex: Vingadores"
+          placeholder="Pesquisar..."
           placeholderTextColor="#ddd"
           value={input}
           onChangeText={ (text) => setInput(text) }
