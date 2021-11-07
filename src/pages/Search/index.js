@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Name } from './styles'
+import { Container, ListMovies } from './styles'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import api,{ key } from '../../services/api'
+import api, { key } from '../../services/api'
+import SearchItem from '../../components/SearchItem'
 
 function Search() {
   const [movie, setMovie] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const navigation = useNavigation();
-  const rout = useRoute();
+  const route = useRoute();
 
   useEffect(() => {
     let isActive = true;
 
     async function getSearchMovie() {
       const response = await api.get('/search/movie', {
-        params:{
+        params: {
           query: route?.params?.name,
           api_key: key,
           language: 'pt-BR',
@@ -23,30 +24,39 @@ function Search() {
         }
       })
 
-      if(isActive) {
+      if (isActive) {
         setMovie(response.data.results);
         setLoading(false);
       }
     }
 
-    if(isActive) {
+    if (isActive) {
       getSearchMovie();
     }
 
-    return() => {
+    return () => {
       isActive = false;
     }
   }, [])
 
-  if(loading) {
-    return(
+  const navigateDetailsPage = (item) => {
+    navigation.navigate('Detail', { id: item.id })
+  }
+
+  if (loading) {
+    return (
       <Container></Container>
     )
   }
-  
+
   return (
     <Container>
-      <Name>Search</Name>
+      <ListMovies
+        data={movie}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => String(item?.id)}
+        renderItem={({ item }) => <SearchItem data={item} navigatePage={() => navigateDetailsPage(item)} />}
+      />
     </Container>
   )
 }
